@@ -55,9 +55,7 @@ function App() {
         {/* Add Student */}
         <Route
           path="/add-student"
-          element={
-            <AddStudent students={students} setStudents={setStudents} />
-          }
+          element={<AddStudent students={students} setStudents={setStudents} />}
         />
 
         {/* Edit Student */}
