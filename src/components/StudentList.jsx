@@ -18,7 +18,7 @@ const StudentList = ({ students, setStudents }) => {
       .includes(searchTerm.toLowerCase())
   );
 
-  // ✅ Checkbox select
+  // ☑ Checkbox handler
   const handleCheckboxChange = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id)
@@ -45,7 +45,7 @@ const StudentList = ({ students, setStudents }) => {
   const confirmDelete = () => {
     if (deleteType === "single") {
       setStudents(students.filter((s) => s.id !== studentToDelete));
-    } else if (deleteType === "multiple") {
+    } else {
       setStudents(students.filter((s) => !selectedIds.includes(s.id)));
       setSelectedIds([]);
     }
@@ -66,7 +66,7 @@ const StudentList = ({ students, setStudents }) => {
     <div className="student-container">
       <h2>Student Management</h2>
 
-      {/* 🔝 Top Bar */}
+      {/* 🔝 TOP BAR */}
       <div className="top-bar">
         <input
           type="text"
@@ -76,11 +76,12 @@ const StudentList = ({ students, setStudents }) => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
 
-        <div className="action-buttons">
+        {/* RIGHT SIDE BUTTONS */}
+        <div className="top-actions">
           <button
             className="btn delete-btn"
-            onClick={handleDeleteSelectedClick}
             disabled={selectedIds.length === 0}
+            onClick={handleDeleteSelectedClick}
           >
             Delete Selected
           </button>
@@ -91,76 +92,78 @@ const StudentList = ({ students, setStudents }) => {
         </div>
       </div>
 
-      {/* 📋 Student Table */}
-      <table className="student-table">
-        <thead>
-          <tr>
-            <th>Select</th>
-            <th>Sl.No</th>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>DOB</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {filteredStudents.length === 0 ? (
+      {/* 📋 RESPONSIVE TABLE */}
+      <div className="table-wrapper">
+        <table className="student-table">
+          <thead>
             <tr>
-              <td colSpan="9" style={{ textAlign: "center" }}>
-                No students found
-              </td>
+              <th>Select</th>
+              <th>S.ID</th>
+              <th>Name</th>
+              <th>Gender</th>
+              <th>DOB</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th>Actions</th>
             </tr>
-          ) : (
-            filteredStudents.map((student, index) => (
-              <tr key={student.id}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(student.id)}
-                    onChange={() => handleCheckboxChange(student.id)}
-                  />
-                </td>
+          </thead>
 
-                <td>{index + 1}</td>
-
-                <td>
-                  {student.firstName} {student.lastName}
-                </td>
-
-                <td>{student.gender}</td>
-                <td>{student.dob}</td>
-                <td>{student.phone}</td>
-                <td>{student.email}</td>
-                <td>{student.address}</td>
-
-                {/* ✅ ACTION BUTTONS WITH SPACING */}
-                <td>
-                  <div className="action-btn-group">
-                    <Link to={`/edit-student/${student.id}`}>
-                      <button className="btn edit-btn">Edit</button>
-                    </Link>
-
-                    <button
-                      className="btn delete-btn"
-                      onClick={() =>
-                        handleSingleDeleteClick(student.id)
-                      }
-                    >
-                      Delete
-                    </button>
-                  </div>
+          <tbody>
+            {filteredStudents.length === 0 ? (
+              <tr>
+                <td colSpan="9" className="no-data">
+                  No students found
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              filteredStudents.map((student, index) => (
+                <tr key={student.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(student.id)}
+                      onChange={() => handleCheckboxChange(student.id)}
+                    />
+                  </td>
 
-      {/* 🧾 Confirmation Modal */}
+                  <td>{index + 1}</td>
+
+                  <td>
+                    {student.firstName} {student.lastName}
+                  </td>
+
+                  <td>{student.gender}</td>
+                  <td>{student.dob}</td>
+                  <td>{student.phone}</td>
+                  <td>{student.email}</td>
+                  <td>{student.address}</td>
+
+                  {/* ACTION BUTTONS */}
+                  <td>
+                    <div className="action-btn-group">
+                      <Link to={`/edit-student/${student.id}`}>
+                        <button className="btn edit-btn">Edit</button>
+                      </Link>
+
+                      <button
+                        className="btn delete-btn"
+                        onClick={() =>
+                          handleSingleDeleteClick(student.id)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 🧾 CONFIRM DELETE MODAL */}
       {showConfirm && (
         <div className="modal-overlay">
           <div className="modal-box">
